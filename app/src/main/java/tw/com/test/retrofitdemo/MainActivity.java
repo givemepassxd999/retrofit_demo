@@ -11,21 +11,18 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
 
 public class MainActivity extends AppCompatActivity {
-    private Retrofit retrofit;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         final TextView tv = findViewById(R.id.info);
-        retrofit = AppClientManager.getClient();
         Button info = findViewById(R.id.send_data);
         info.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                PostApi postApi = retrofit.create(PostApi.class);
+                PostApi postApi = AppClientManager.getClient().create(PostApi.class);
                 postApi.index().enqueue(new Callback<List<Posts>>() {
                     @Override
                     public void onResponse(Call<List<Posts>> call, Response<List<Posts>> response) {
@@ -34,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
                         for(Posts p : list){
                             sb.append(p.getBody());
                             sb.append("\n");
+                            sb.append("---------------------\n");
                         }
                         tv.setText(sb.toString());
                     }
